@@ -1,6 +1,9 @@
 package week1day2;
 
 
+import java.util.Deque;
+import java.util.LinkedList;
+
 /*
 * Develop a mathematical Calculator
 * a. (2 Variables -- X=5,Y=7) -->> Add, Sub, Mul, Div
@@ -15,14 +18,38 @@ package week1day2;
 * Assumption:1. No parentheses; 2. Input will always be valid; 3. input2.length = input1.length - 1.
 * */
 public class P1Calculator {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         int[] nums1 = new int[]{5, 6, 14, 7};
         String[] operators1 = new String[]{"Add", "Sub", "Div"};
         System.out.println(myCalculator(nums1, operators1));
     }
 
 
-    public static int myCalculator(int[] nums, String[] operators){
-        return 0;
+    public static int myCalculator(int[] nums, String[] operators) throws Exception {
+        Deque<Double> stack = new LinkedList<>();
+        stack.push((double)nums[0]);
+        int n = operators.length;
+        for(int i = 0; i < n; i++){
+            String operator = operators[i];
+            double nextNum = nums[i + 1];
+            if(operator.equals("Add")){
+                stack.push(nextNum);
+            }else if(operator.equals("Sub")){
+                stack.push(-nextNum);
+            }else if(operator.equals("Mul")){
+                double preNum = stack.pop();
+                stack.push(preNum * nextNum);
+            }else if(operator.equals("Div")){
+                double preNum = stack.pop();
+                stack.push(preNum / nextNum);
+            }else{
+                throw new Exception("Invalid operator.");
+            }
+        }
+        double ans = 0;
+        while(!stack.isEmpty()){
+            ans += stack.pop();
+        }
+        return (int)Math.floor(ans);
     }
 }
